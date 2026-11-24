@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAHIL AI</title>
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 16px 18px 20px;
+  background: radial-gradient(circle at 50% 35%, #123663 0%, #091d3a 50%, #051324 100%);
+  color: #f0f9ff;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.header-area {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 20;
+}
+.top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.25);
+  padding-bottom: 12px;
+}
+.title-top {
+  font-size: 26px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  color: #7dd3fc;
+}
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#wakePill {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  background: rgba(16, 185, 129, 0.14);
+  color: #6ee7b7;
+  cursor: pointer;
+}
+#wakePill.active {
+  background: #10b981;
+  color: #03150e;
+}
+#menuBtn {
+  font-size: 24px;
+  padding: 6px 14px;
+  border-radius: 12px;
+  border: 1px solid #38bdf8;
+  background: #102a4c;
+  color: #ffffff;
+  cursor: pointer;
+}
+#drawer {
+  display: none;
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #091a33;
+  border: 1px solid #38bdf8;
+  text-align: left;
+  position: relative;
+  z-index: 30;
+}
+.center-area {
+  flex: 1;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+  position: relative;
+  z-index: 10;
+}
+.hero-h1 {
+  font-size: 46px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin: 0 0 8px;
+  color: #e0f2fe;
+}
+.sub-p {
+  color: #9bc0dc;
+  font-size: 15px;
+  margin: 0 0 30px;
+}
+#sCircle {
+  width: 180px;
+  height: 180px;
+  line-height: 180px;
+  border-radius: 50%;
+  margin: 0 auto 28px;
+  font-size: 70px;
+  font-weight: bold;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0ea5e9, #10b981);
+  box-shadow: 0 0 38px rgba(56, 189, 248, 0.48), 0 0 70px rgba(16, 185, 129, 0.2);
+  cursor: pointer;
+  user-select: none;
+}
+#sCircle:active {
+  transform: scale(0.95);
+}
+.btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+#talkBtn {
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.4);
+  cursor: pointer;
+}
+#talkBtn:active {
+  transform: scale(0.96);
+}
+#stopBtn {
+  padding: 15px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 8px 22px rgba(220, 38, 38, 0.35);
+  cursor: pointer;
+}
+#stopBtn:active {
+  transform: scale(0.96);
+}
+#statusText {
+  max-width: 640px;
+  max-height: 210px;
+  overflow-y: auto;
+  margin: 24px auto 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 19px;
+  color: #bae6fd;
+  line-height: 1.5;
+}
+.bottom-bar {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(125, 211, 252, 0.16);
+  font-size: 13px;
+  color: #88b2d1;
+}
+.row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.sec-lbl {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #7dd3fc;
+  font-weight: bold;
+  margin-top: 12px;
+}
+#cmdBox, #gemKeyBox {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #38bdf8;
+  background: #061224;
+  color: #ffffff;
+  font-size: 14px;
+}
+#sendBtn, #clearBtn, #saveKeyBtn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #38bdf8;
+  color: #041322;
+  font-weight: bold;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+#saveKeyBtn:active {
+  transform: scale(0.95);
+}
+#histList {
+  margin-top: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.h-item {
+  padding: 8px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+</style>
+</head>
+<body>
+
+<div class="header-area">
+  <div class="top">
+    <span class="title-top">SAHIL AI</span>
+    <div class="top-right">
+      <button type="button" id="wakePill">Wake Word: OFF</button>
+      <button type="button" id="menuBtn">&#9776;</button>
+    </div>
+  </div>
+
+  <div id="drawer">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <strong>Question &amp; Answer History</strong>
+      <button type="button" id="clearBtn">Clear</button>
+    </div>
+    <div class="row">
+      <input type="text" id="cmdBox" placeholder="Hindi ya English mein sawal likhein...">
+      <button type="button" id="sendBtn">Send</button>
+    </div>
+    <div id="histList">No history yet.</div>
+
+    <div class="sec-lbl">Gemini API Key (For Detailed ChatGPT/Gemini Answers)</div>
+    <div class="row">
+      <input type="text" id="gemKeyBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Paste Gemini API key here">
+      <button type="button" id="saveKeyBtn">Save</button>
+    </div>
+    <div id="keyMsg" style="font-size:12px; color:#9bc0dc; margin-top:5px;">
+      Key save karne par har sawal ka lamba aur clear jawab yahin milega.
+    </div>
+  </div>
+</div>
+
+<div class="center-area">
+  <h1 class="hero-h1">SAHIL AI</h1>
+  <p class="sub-p">Hindi &amp; English Voice Assistant</p>
+
+  <div id="sCircle">S</div>
+
+  <div class="btn-group">
+    <button type="button" id="talkBtn">&#127908; Talk to SAHIL</button>
+    <button type="button" id="stopBtn">&#9724; Stop</button>
+  </div>
+
+  <div id="statusText">Welcome to Sahil, how may I help you?</div>
+</div>
+
+<div class="bottom-bar">
+  Tap <strong>S</strong> or <strong>Talk to SAHIL</strong> &bull; Tap <strong>Stop</strong> to halt &bull; Open <strong>&#9776;</strong> for History
+</div>
+
+<script>
+var WELCOME = "Welcome to Sahil, how may I help you?";
+var histData = [];
+var gemKey = "";
+var wakeMode = false;
+var rec = null;
+var jobId = 0;
+var welcomeSaidThisOpen = false;
+var lastSaveTap = 0;
+
+try {
+  histData = JSON.parse(localStorage.getItem("sahil_simple_hist") || "[]");
+  gemKey = localStorage.getItem("sahil_gemini_key") || "";
+} catch (e) {}
+
+if (gemKey) {
+  document.getElementById("gemKeyBox").value = gemKey;
+  document.getElementById("keyMsg").style.color = "#6ee7b7";
+  document.getElementById("keyMsg").innerText = "Gemini API key saved! Detailed answers active.";
+}
+
+function showHist() {
+  var box = document.getElementById("histList");
+  if (!histData.length) {
+    box.innerHTML = "<div class='h-item'>No history yet.</div>";
+    return;
+  }
+  var s = "";
+  for (var i = 0; i < histData.length; i++) {
+    s += "<div class='h-item'><b>" + histData[i].who + ":</b> " + histData[i].msg + "</div>";
+  }
+  box.innerHTML = s;
+  box.scrollTop = box.scrollHeight;
+}
+
+function saveHist(who, msg) {
+  histData.push({ who: who, msg: msg });
+  if (histData.length > 60) histData = histData.slice(-60);
+  try {
+    localStorage.setItem("sahil_simple_hist", JSON.stringify(histData));
+  } catch (e) {}
+  showHist();
+}
+
+function isHindiText(text) {
+  if (/[\u0900-\u097F]/.test(text)) return true;
+  return /\b(kya|kaise|kaisa|kaisi|kaun|kab|kahan|kyun|kyu|batao|bataiye|samjhao|hai|hain|ho|mera|meri|mere|tum|aap|namaste|aaj|kal|samay|waqt|tarikh|din|saal|mausam|madad|karo|kijiye|baare|mein|ke|ki|ka|ko|se|par|aur|ya|nahi|haan)\b/i.test(text);
+}
+
+function pickVoice(langPrefix) {
+  if (!("speechSynthesis" in window)) return null;
+  var list = window.speechSynthesis.getVoices() || [];
+  for (var i = 0; i < list.length; i++) {
+    if (String(list[i].lang || "").toLowerCase().indexOf(langPrefix) === 0) {
+      return list[i];
+    }
+  }
+  return list[0] || null;
+}
+
+function stopAction() {
+  jobId++;
+  wakeMode = false;
+  var pill = document.getElementById("wakePill");
+  pill.innerText = "Wake Word: OFF";
+  pill.classList.remove("active");
+
+  if ("speechSynthesis" in window) {
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
+  if (rec) {
+    try { rec.abort(); } catch (e) {}
+    rec = null;
+  }
+  document.getElementById("statusText").innerText = "Stopped.";
+}
+
+function bolna(txt, logIt, forceHi, currentJob) {
+  if (typeof currentJob === "number" && currentJob !== jobId) return;
+  document.getElementById("statusText").innerText = txt;
+  if (logIt) saveHist("Sahil", txt);
+
+  if ("speechSynthesis" in window) {
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(txt);
+      var hi = (typeof forceHi === "boolean") ? forceHi : isHindiText(txt);
+      u.lang = hi ? "hi-IN" : "en-US";
+      var chosen = pickVoice(hi ? "hi" : "en");
+      if (chosen) u.voice = chosen;
+      u.rate = 0.98;
+      u.onend = function() {
+        if (wakeMode && currentJob === jobId) {
+          startWakeOnce();
+        }
+      };
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+}
+
+function triggerWelcome(fromGesture) {
+  if (welcomeSaidThisOpen && !fromGesture) return;
+  document.getElementById("statusText").innerText = WELCOME;
+  if (!("speechSynthesis" in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(WELCOME);
+    u.lang = "en-US";
+    var v = pickVoice("en");
+    if (v) u.voice = v;
+    u.rate = 0.98;
+    u.onstart = function() {
+      welcomeSaidThisOpen = true;
+    };
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+function tryMath(text) {
+  var expr = text
+    .replace(/calculate|what is|what's|solve|kitna hota hai|kitna hai/gi, "")
+    .replace(/plus|jod/gi, "+")
+    .replace(/minus|ghata/gi, "-")
+    .replace(/times|multiplied by|guna/gi, "*")
+    .replace(/divided by|bhag/gi, "/")
+    .replace(/[^0-9+\-*/().\s]/g, "")
+    .trim();
+  if (!expr || !/\d/.test(expr)) return null;
+  try {
+    var val = Function('"use strict"; return (' + expr + ")")();
+    if (typeof val === "number" && isFinite(val)) {
+      return Number.isInteger(val) ? val : val.toFixed(2);
+    }
+  } catch (e) {}
+  return null;
+}
+
+function askGeminiLong(q, hi) {
+  if (!gemKey) return Promise.resolve({ text: null, err: null });
+  var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + encodeURIComponent(gemKey);
+  var prompt = hi
+    ? "Is sawal ka ekdam clear, aasan aur detailed (4 se 6 lines ka) jawab Hindi mein do, bina * ya # ke: " + q
+    : "Give a clear, helpful, and detailed answer (4 to 6 sentences) in English without * or # symbols: " + q;
+  return fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+  })
+    .then(function(r) {
+      return r.json().then(function(d) {
+        if (!r.ok) {
+          var apiErr = (d && d.error && d.error.message) ? d.error.message : ("HTTP " + r.status);
+          return { text: null, err: apiErr };
+        }
+        if (d && d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts && d.candidates[0].content.parts[0]) {
+          return { text: d.candidates[0].content.parts[0].text.replace(/[*#]/g, "").trim(), err: null };
+        }
+        return { text: null, err: "Empty response from Gemini" };
+      });
+    })
+    .catch(function(err) {
+      return { text: null, err: (err && err.message) ? err.message : "Network error" };
+    });
+}
+
+function askWikiLong(q, hi) {
+  var topic = q
+    .replace(/^(who is|who was|what is|what are|what was|where is|when was|why is|how does|how to|tell me about|explain|kya hai|kaun hai|ke baare mein batao|batao)\s+/i, "")
+    .replace(/[?.!]+$/g, "")
+    .trim() || q;
+  var lang = hi ? "hi" : "en";
+  var sUrl = "https://" + lang + ".wikipedia.org/w/api.php?action=query&list=search&srsearch=" + encodeURIComponent(topic) + "&format=json&origin=*";
+  return fetch(sUrl)
+    .then(function(r) { return r.json(); })
+    .then(function(sd) {
+      var title = sd && sd.query && sd.query.search && sd.query.search[0] ? sd.query.search[0].title : null;
+      if (!title && hi) return askWikiLong(q, false);
+      if (!title) return null;
+      return fetch("https://" + lang + ".wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(title)).then(function(res) { return res.json(); });
+    })
+    .then(function(sum) {
+      if (typeof sum === "string") return sum;
+      if (sum && sum.extract) {
+        return sum.extract.split(". ").slice(0, 4).join(". ");
+      }
+      return null;
+    })
+    .catch(function() { return null; });
+}
+
+function replyCmd(q) {
+  var clean = String(q || "").trim();
+  if (!clean) return;
+  welcomeSaidThisOpen = true;
+  saveHist("You", clean);
+  var hi = isHindiText(clean);
+  var low = clean.toLowerCase();
+  var myJob = ++jobId;
+
+  if (low === "stop" || low === "ruk jao" || low === "band karo") {
+    stopAction();
+    return;
+  }
+
+  var mathAns = tryMath(low);
+  if (mathAns !== null) {
+    bolna(hi ? ("Iska jawab " + mathAns + " hai.") : ("The answer is " + mathAns + "."), true, hi, myJob);
+    return;
+  }
+
+  if (low.indexOf("time") !== -1 || low.indexOf("samay") !== -1 || low.indexOf("waqt") !== -1) {
+    var t = new Date().toLocaleTimeString(hi ? "hi-IN" : "en-US", { hour: "2-digit", minute: "2-digit" });
+    bolna(hi ? ("Abhi samay " + t + " ho raha hai.") : ("The current time is " + t + "."), true, hi, myJob);
+    return;
+  }
+  if (low.indexOf("year") !== -1 || low.indexOf("saal") !== -1) {
+    var y = new Date().getFullYear();
+    bolna(hi ? ("Abhi saal " + y + " chal raha hai.") : ("The current year is " + y + "."), true, hi, myJob);
+    return;
+  }
+  if (low.indexOf("day") !== -1 || low.indexOf("din") !== -1) {
+    var dName = new Date().toLocaleDateString(hi ? "hi-IN" : "en-US", { weekday: "long" });
+    bolna(hi ? ("Aaj " + dName + " hai.") : ("Today is " + dName + "."), true, hi, myJob);
+    return;
+  }
+  if (low.indexOf("date") !== -1 || low.indexOf("tarikh") !== -1) {
+    var dFull = new Date().toLocaleDateString(hi ? "hi-IN" : "en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+    bolna(hi ? ("Aaj ki tarikh " + dFull + " hai.") : ("Today's date is " + dFull + "."), true, hi, myJob);
+    return;
+  }
+
+  document.getElementById("statusText").innerText = hi ? "Jawab taiyar kar raha hoon..." : "Thinking...";
+  askGeminiLong(clean, hi).then(function(gRes) {
+    if (myJob !== jobId) return;
+    if (gRes && gRes.text) {
+      bolna(gRes.text, true, hi, myJob);
+      return;
+    }
+    askWikiLong(clean, hi).then(function(wAns) {
+      if (myJob !== jobId) return;
+      if (wAns) {
+        bolna(wAns, true, hi, myJob);
+      } else if (gRes && gRes.err) {
+        bolna("Gemini error: " + gRes.err, true, false, myJob);
+      } else {
+        bolna(
+          hi ? ("Maine suna: " + clean + ". Detail ke liye menu mein Gemini key save karein.") : ("I heard: " + clean + ". Save a Gemini API key in menu for detailed answers."),
+          true,
+          hi,
+          myJob
+        );
+      }
+    });
+  });
+}
+
+function handleSaveKey(ev) {
+  if (ev) {
+    if (ev.cancelable) ev.preventDefault();
+    ev.stopPropagation();
+  }
+  var now = Date.now();
+  if (now - lastSaveTap < 200) return;
+  lastSaveTap = now;
+
+  var box = document.getElementById("gemKeyBox");
+  var msg = document.getElementById("keyMsg");
+  var st = document.getElementById("statusText");
+  if (box) box.blur();
+
+  gemKey = (box ? box.value : "").trim();
+  if (gemKey) {
+    try { localStorage.setItem("sahil_gemini_key", gemKey); } catch (e) {}
+    if (msg) {
+      msg.style.color = "#6ee7b7";
+      msg.innerText = "Gemini API key saved! Detailed answers active.";
+    }
+    if (st) st.innerText = "Gemini API key saved! Detailed answers active.";
+  } else {
+    try { localStorage.removeItem("sahil_gemini_key"); } catch (e) {}
+    if (msg) {
+      msg.style.color = "#9bc0dc";
+      msg.innerText = "Key cleared. Using Wikipedia summary.";
+    }
+    if (st) st.innerText = "Gemini API key cleared.";
+  }
+}
+
+function startWakeOnce() {
+  if (!wakeMode) return;
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  if (rec) {
+    try { rec.abort(); } catch (e) {}
+  }
+  rec = new SR();
+  rec.lang = "en-IN";
+  rec.interimResults = false;
+  rec.onresult = function(e) {
+    var heard = String(e.results[0][0].transcript || "").trim();
+    if (/sahil|साहिल/i.test(heard)) {
+      var cmd = heard.replace(/^.*?(sahil|साहिल)[,:\s-]*/i, "").trim();
+      if (cmd) replyCmd(cmd);
+    }
+  };
+  rec.onend = function() {
+    if (wakeMode) {
+      startWakeOnce();
+    }
+  };
+  try { rec.start(); } catch (e) {}
+}
+
+function startMic() {
+  welcomeSaidThisOpen = true;
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    bolna("Mic not supported here. Use menu type box.", false, false, jobId);
+    return;
+  }
+  if (rec) {
+    try { rec.abort(); } catch (e) {}
+  }
+  rec = new SR();
+  rec.lang = "en-IN";
+  rec.interimResults = false;
+  rec.onstart = function() {
+    document.getElementById("statusText").innerText = "Listening...";
+  };
+  rec.onresult = function(e) {
+    var txt = String(e.results[0][0].transcript || "").trim();
+    txt = txt.replace(/^(sahil|साहिल)[,:\s-]*/i, "").trim() || txt;
+    replyCmd(txt);
+  };
+  rec.onerror = function(e) {
+    document.getElementById("statusText").innerText = "Mic error: " + e.error;
+  };
+  rec.onend = function() {
+    if (wakeMode) startWakeOnce();
+  };
+  rec.start();
+}
+
+document.getElementById("stopBtn").onclick = stopAction;
+document.getElementById("stopBtn").ontouchstart = function(e) {
+  e.preventDefault();
+  stopAction();
+};
+
+document.getElementById("wakePill").onclick = function() {
+  welcomeSaidThisOpen = true;
+  wakeMode = !wakeMode;
+  var pill = document.getElementById("wakePill");
+  if (wakeMode) {
+    pill.innerText = 'Wake Word "Sahil": ON';
+    pill.classList.add("active");
+    startWakeOnce();
+  } else {
+    stopAction();
+  }
+};
+
+document.getElementById("menuBtn").onclick = function() {
+  var d = document.getElementById("drawer");
+  d.style.display = (d.style.display === "block") ? "none" : "block";
+  showHist();
+};
+
+document.getElementById("clearBtn").onclick = function() {
+  histData = [];
+  try { localStorage.removeItem("sahil_simple_hist"); } catch (e) {}
+  showHist();
+};
+
+document.getElementById("sendBtn").onclick = function() {
+  var inp = document.getElementById("cmdBox");
+  if (inp.value.trim()) {
+    replyCmd(inp.value.trim());
+    inp.value = "";
+  }
+};
+
+var saveBtnEl = document.getElementById("saveKeyBtn");
+saveBtnEl.onclick = handleSaveKey;
+saveBtnEl.onpointerdown = handleSaveKey;
+saveBtnEl.ontouchstart = handleSaveKey;
+
+document.getElementById("sCircle").onclick = startMic;
+document.getElementById("talkBtn").onclick = startMic;
+
+if ("speechSynthesis" in window && typeof window.speechSynthesis.onvoiceschanged !== "undefined") {
+  window.speechSynthesis.onvoiceschanged = function() {
+    if (!welcomeSaidThisOpen) {
+      triggerWelcome(false);
+    }
+  };
+}
+
+document.addEventListener("pointerdown", function() {
+  if (!welcomeSaidThisOpen) {
+    triggerWelcome(true);
+  }
+}, { once: true });
+
+window.onload = function() {
+  welcomeSaidThisOpen = false;
+  showHist();
+  triggerWelcome(false);
+};
+</script>
+</body>
+</html>
